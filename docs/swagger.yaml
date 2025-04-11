@@ -1,0 +1,37 @@
+definitions:
+  controllers.PingResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact:
+    email: fiqrikm18@gmail.com
+    name: API Support
+  description: This is a simpel saving transaction API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: ISI Saving Transation API
+  version: "1.0"
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.PingResponse'
+      summary: ping
+      tags:
+      - Ping
+swagger: "2.0"
