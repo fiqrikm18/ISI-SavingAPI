@@ -7,6 +7,45 @@ definitions:
       message:
         type: string
     type: object
+  dto.ErrorResponse:
+    properties:
+      remark: {}
+    type: object
+  dto.RegisterAccountRequest:
+    properties:
+      nama:
+        type: string
+      nik:
+        type: string
+      phone_number:
+        type: string
+    required:
+    - nama
+    - nik
+    - phone_number
+    type: object
+  dto.RegisterAccountResponse:
+    properties:
+      no_rekening:
+        type: string
+    type: object
+  dto.TransactionRequest:
+    properties:
+      amount:
+        type: number
+      no_rekening:
+        type: string
+    required:
+    - amount
+    - no_rekening
+    type: object
+  dto.TransactionResponse:
+    properties:
+      saldo:
+        type: number
+    required:
+    - saldo
+    type: object
 info:
   contact:
     email: fiqrikm18@gmail.com
@@ -16,9 +55,112 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: ISI Saving Transation API
+  title: ISI Saving Transaction API
   version: "1.0"
 paths:
+  /account/daftar:
+    post:
+      consumes:
+      - application/json
+      description: Create new account
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RegisterAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create new account
+      tags:
+      - accounts
+  /account/saldo/{no_rekening}:
+    get:
+      consumes:
+      - application/json
+      description: Withdraw balance from account
+      parameters:
+      - description: No Rekening
+        in: path
+        name: no_rekening
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Withdraw balance from account
+      tags:
+      - accounts
+  /account/tabung:
+    post:
+      consumes:
+      - application/json
+      description: Add balance to account
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Add balance to account
+      tags:
+      - accounts
+  /account/tarik:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw balance from account
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Withdraw balance from account
+      tags:
+      - accounts
   /ping:
     get:
       consumes:

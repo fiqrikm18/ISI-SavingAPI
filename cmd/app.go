@@ -2,13 +2,19 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 
 	"github.com/fiqrikm18/ISITransaction/internal/configs"
 	"github.com/fiqrikm18/ISITransaction/internal/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	slogfiber "github.com/samber/slog-fiber"
+	slogmulti "github.com/samber/slog-multi"
 )
 
-// @title ISI Saving Transation API
+// @title ISI Saving Transaction API
 // @version 1.0
 // @description This is a simpel saving transaction API.
 // @termsOfService http://swagger.io/terms/
@@ -21,20 +27,43 @@ func Run() {
 }
 
 func initServer() {
-	appPort := configs.AppPort
+	// Create log file
+	file, err := os.OpenFile("logs/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+
+	// Set up two handlers: terminal and file
+	fileHandler := slog.NewJSONHandler(file, &slog.HandlerOptions{Level: slog.LevelInfo})
+
+	// Combine both using a multi-logger (samber/slog-multi)
+	loggerHanlers := slog.New(slogmulti.Fanout(fileHandler))
+	slog.SetDefault(loggerHanlers)
+
+	appConfig := configs.NewConfig()
 
 	// initialize the fiber app
 	app := fiber.New(fiber.Config{
-		Prefork:       true,
+		Prefork:       false,
 		StrictRouting: false,
 		CaseSensitive: false,
 	})
+
+	app.Use(recover.New())
+	app.Use(slogfiber.New(slog.Default()))
+	app.Use(logger.New(logger.Config{
+		Format:     "[${time}] ${status} - ${latency} ${method} ${path}\n",
+		TimeFormat: "2006-01-02 15:04:05",
+		TimeZone:   "Local",
+	}))
 
 	// registering application routers
 	routes.RegisterApiRouter(app)
 	routes.RegisterWebRouter(app)
 
 	// start the server
-	fmt.Printf("Server is running on port %s\n", appPort)
-	app.Listen(appPort)
+	if err := app.Listen(appConfig.AppPort); err != nil {
+		fmt.Println("Error starting server:", err.Error())
+		return
+	}
 }

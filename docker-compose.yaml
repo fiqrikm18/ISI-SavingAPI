@@ -1,0 +1,43 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080" 
+    networks:
+      - isi-transaction
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=saving_transaction
+      - TZ=Asia/Jakarta
+    ports:
+      - "5432:5432"
+    networks:
+      - isi-transaction
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+volumes:
+  postgres-data:
+
+networks:
+  isi-transaction:
+    driver: bridge

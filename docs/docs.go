@@ -23,6 +23,164 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account/daftar": {
+            "post": {
+                "description": "Create new account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Create new account",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterAccountRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/saldo/{no_rekening}": {
+            "get": {
+                "description": "Withdraw balance from account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Withdraw balance from account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "No Rekening",
+                        "name": "no_rekening",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/tabung": {
+            "post": {
+                "description": "Add balance to account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Add balance to account",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/tarik": {
+            "post": {
+                "description": "Withdraw balance from account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Withdraw balance from account",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TransactionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "ping",
@@ -59,6 +217,65 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "remark": {}
+            }
+        },
+        "dto.RegisterAccountRequest": {
+            "type": "object",
+            "required": [
+                "nama",
+                "nik",
+                "phone_number"
+            ],
+            "properties": {
+                "nama": {
+                    "type": "string"
+                },
+                "nik": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RegisterAccountResponse": {
+            "type": "object",
+            "properties": {
+                "no_rekening": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.TransactionRequest": {
+            "type": "object",
+            "required": [
+                "amount",
+                "no_rekening"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "no_rekening": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.TransactionResponse": {
+            "type": "object",
+            "required": [
+                "saldo"
+            ],
+            "properties": {
+                "saldo": {
+                    "type": "number"
+                }
+            }
         }
     }
 }`
@@ -69,7 +286,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "ISI Saving Transation API",
+	Title:            "ISI Saving Transaction API",
 	Description:      "This is a simpel saving transaction API.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
