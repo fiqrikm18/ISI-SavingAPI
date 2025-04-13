@@ -36,8 +36,16 @@ func NewAccountService(
 
 func (accountService *AccountService) RegisterAccount(dto *dto.RegisterAccountRequest) error {
 	// Validate the request
-	if dto.Nama == "" || dto.Nik == "" || dto.PhoneNumber == "" {
-		return fmt.Errorf("invalid request")
+	if dto.Nama == "" {
+		return fmt.Errorf("name is required")
+	}
+
+	if dto.Nik == "" {
+		return fmt.Errorf("NIK is required")
+	}
+
+	if dto.PhoneNumber == "" {
+		return fmt.Errorf("phone number is required")
 	}
 
 	// Check if the account already exists
