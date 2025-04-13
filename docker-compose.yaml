@@ -14,6 +14,20 @@ services:
     networks:
       - isi-transaction
 
+  migrations:
+    image: kukymbr/goose-docker:3.24.2
+    environment:
+      - GOOSE_DRIVER=postgres
+      - GOOSE_DBSTRING=host=db port=5432 user=postgres password=postgres dbname=saving_transaction sslmode=disable
+      - GOOSE_TABLE=saving_transaction.migrations
+    volumes:
+      - ./db/migrations:/migrations
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - isi-transaction
+
   db:
     image: postgres:latest
     restart: unless-stopped
