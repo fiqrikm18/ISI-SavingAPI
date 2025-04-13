@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"database/sql"
+	"errors"
 	"time"
 
 	"github.com/fiqrikm18/ISITransaction/internal/configs"
@@ -46,6 +48,9 @@ func (repository *AccountRepository) FindAccountByAccountNumber(accountNumber st
 	var account models.Account
 	err := repository.dbConf.DB.Get(&account, qs, accountNumber)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("account not found")
+		}
 		return nil, err
 	}
 
@@ -57,6 +62,9 @@ func (repository *AccountRepository) FindAccountByNIK(nik string) (*models.Accou
 	var account models.Account
 	err := repository.dbConf.DB.Get(&account, qs, nik)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("account not found")
+		}
 		return nil, err
 	}
 
@@ -68,6 +76,9 @@ func (repository *AccountRepository) FindAccountByPhone(phone string) (*models.A
 	var account models.Account
 	err := repository.dbConf.DB.Get(&account, qs, phone)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("account not found")
+		}
 		return nil, err
 	}
 
@@ -79,6 +90,9 @@ func (repository *AccountRepository) FindAccountByID(id int) (*models.Account, e
 	var account models.Account
 	err := repository.dbConf.DB.Get(&account, qs, id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("account not found")
+		}
 		return nil, err
 	}
 
@@ -90,6 +104,9 @@ func (repository *AccountRepository) FindAccountByName(name string) (*models.Acc
 	var account models.Account
 	err := repository.dbConf.DB.Get(&account, qs, name)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("account not found")
+		}
 		return nil, err
 	}
 

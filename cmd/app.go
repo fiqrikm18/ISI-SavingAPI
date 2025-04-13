@@ -8,6 +8,7 @@ import (
 	"github.com/fiqrikm18/ISITransaction/internal/configs"
 	"github.com/fiqrikm18/ISITransaction/internal/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	slogfiber "github.com/samber/slog-fiber"
@@ -50,6 +51,7 @@ func initServer() {
 	})
 
 	app.Use(recover.New())
+	app.Use(cors.New())
 	app.Use(slogfiber.New(slog.Default()))
 	app.Use(logger.New(logger.Config{
 		Format:     "[${time}] ${status} - ${latency} ${method} ${path}\n",

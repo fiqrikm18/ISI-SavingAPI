@@ -7,6 +7,7 @@ require (
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
+	github.com/samber/slog-fiber v1.18.0
 	github.com/samber/slog-multi v1.4.0
 	github.com/swaggo/swag v1.16.4
 )
@@ -20,7 +21,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/samber/lo v1.49.1 // indirect
-	github.com/samber/slog-fiber v1.18.0 // indirect
 	github.com/swaggo/files/v2 v2.0.2 // indirect
 	go.opentelemetry.io/otel v1.29.0 // indirect
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
